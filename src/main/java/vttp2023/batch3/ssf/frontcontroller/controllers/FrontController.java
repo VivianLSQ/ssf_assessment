@@ -48,33 +48,33 @@ public class FrontController {
         {
             login.setCaptcha("");
             model.addAttribute("message", "Username is required");
-            return "login";
+            return "view1";
         }
  
     if (login.getPassword()==null || login.getPassword().equals(""))
     {
         login.setCaptcha("");
         model.addAttribute("message", "Password is required");
-        return "login";
+        return "view1";
     }   
  
      String captcha=(String)session.getAttribute("CAPTCHA");
         if(captcha==null || (captcha!=null && !captcha.equals(login.getCaptcha()))){
             login.setCaptcha("");
             model.addAttribute("message", "Captcha does not match");
-            return "login";
+            return "view0";
         }
  
         if(login.getUsername().equals("fred") && login.getPassword().equals("fredfred")){
             System.out.println("user id and password matches");
             model.addAttribute("loginId", login.getUsername());
-            return "home";
+            return "view1";
  
         }
         else{
             login.setCaptcha("");
-            model.addAttribute("message","User ID or Password Incorrect");
-            return "login";
+            model.addAttribute("message","Username or Password Incorrect");
+            return "view0";
         }
  
 }
@@ -96,7 +96,8 @@ public class FrontController {
 	throws ServletException, IOException{
 		//Use AuthenticationService.authenticate();
 		MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-		map.add("username", username);
+		map.add("username", getUsername);
+		String password;
 		map.add("password", password);
 	}
 	
@@ -105,7 +106,7 @@ public class FrontController {
 			return "view0";
 		}
 		authSvc.save(login, model);
-		LoginUsers.addAttribute("successMessage", "Correct login credentials inputted, with status code:" + HttpStatus.CREATED + "."); 
+		model.addAttribute("successMessage", "Correct login credentials inputted, with status code:" + HttpStatus.CREATED + "."); 
 		System.out.println("Authenticated <username>"); 
 		return "view1"; 
 	}
@@ -129,14 +130,14 @@ public class FrontController {
 			return ResponseEntity
 			.status(HttpStatus.UNAUTHORIZED) // 401 status code
 			.contentType(MediaType.APPLICATION_JSON)
-			.body("Incorrect username and/or password");
-	
+			.body("Incorrect username and/or password"); 
+
 		
 			//Redisplay View 0 with error message and captcha 
 			//return "view0"; 
-			
-
 		}
+
+		
 	
 	
 

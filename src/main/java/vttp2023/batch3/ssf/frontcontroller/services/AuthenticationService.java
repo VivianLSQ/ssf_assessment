@@ -1,7 +1,6 @@
 package vttp2023.batch3.ssf.frontcontroller.services;
 
 import java.util.Date;
-import java.util.Optional;
 
 import org.apache.catalina.session.StandardSession;
 import org.springframework.beans.factory.annotation.Value;
@@ -47,19 +46,18 @@ private String authenticateUrl =
 			return authenticateUrl; 
 
 			//if username or password inputted does not match/ aka incorrect, return view 0
-			if(("username"||"password") != ("login.username"||"login.password")){
-				return "view0"; 
+			// if(("username"||"password") != ("login.username"||"login.password")){
+			// 	return "view0"; 
 
 			}
-	}
 
 
-	// Task 3
+	// Task 4
 	// DO NOT CHANGE THE METHOD'S SIGNATURE
 	// Write an implementation to disable a user account for 30 mins
 	public void disableUser(String username) {
 		// if(loginCount>= 3){//then disable user 
-		// 	//can use session id to track (?); or use hashmap
+		// 	//can use session id to track (?); or use hashmap (invalid username, invalid password and incorrect captcha answer)
 		
 		int loginAttempt;{
             HttpSession session = new StandardSession(null);
@@ -99,6 +97,7 @@ private String authenticateUrl =
 			session.setAttribute("message","loginAttempt= "+loginAttempt+". Invalid username or password, or wrong answer to Captcha. You have "+allowLogin+" attempts remaining!");
 		}
 		session.setAttribute("loginCount",loginAttempt);
+	}
 
 	}
 
@@ -106,7 +105,7 @@ private String authenticateUrl =
 	// DO NOT CHANGE THE METHOD'S SIGNATURE
 	// Write an implementation to check if a given user's login has been disabled
 	public boolean isLocked(String username) {
-		//if(30 min not up), return to View 2
+		//if(30 min not up yet), return to View 2
 		//else return to View 0 to try login again 
 
 		return false;

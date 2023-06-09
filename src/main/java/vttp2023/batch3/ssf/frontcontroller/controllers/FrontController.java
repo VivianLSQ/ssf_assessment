@@ -11,6 +11,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,49 +31,65 @@ import vttp2023.batch3.ssf.frontcontroller.services.AuthenticationService;
 public class FrontController {
 
 	@Autowired
-	private LoginUsers login ; 
+	private LoginUsers login; 
 
 	@Autowired
 	private AuthenticationService authSvc; 
 
-	//Landing Page 
-	@PostMapping(path="view0//login",
+	@Autowired
+	private CaptchaController captcha; 
+
+	@PostMapping(path ="view0/login",
 				consumes=MediaType.APPLICATION_FORM_URLENCODED_VALUE, 
 				headers="Accept=text/html)")
-	public ResponseEntity<String> createUser(){
-		return ResponseEntity.contentType(MediaType.APPLICATION_JSON);
-
-	}
-	
+	public String login(@ModelAttribute("login") LoginUsers login,BindingResult result,Model model,HttpSession session) {
+ 
+    if (login.getUsername()==null || login.getUsername().equals(""))
+        {
+            login.setCaptcha("");
+            model.addAttribute("message", "Username is required");
+            return "login";
+        }
+ 
+    if (login.getPassword()==null || login.getPassword().equals(""))
+    {
+        login.setCaptcha("");
+        model.addAttribute("message", "Password is required");
+        return "login";
+    }   
+ 
+     String captcha=(String)session.getAttribute("CAPTCHA");
+        if(captcha==null || (captcha!=null && !captcha.equals(login.getCaptcha()))){
+            login.setCaptcha("");
+            model.addAttribute("message", "Captcha does not match");
+            return "login";
+        }
+ 
+        if(login.getUsername().equals("fred") && login.getPassword().equals("fredfred")){
+            System.out.println("user id and password matches");
+            model.addAttribute("loginId", login.getUsername());
+            return "home";
+ 
+        }
+        else{
+            login.setCaptcha("");
+            model.addAttribute("message","User ID or Password Incorrect");
+            return "login";
+        }
+ 
+}
 	
 	public String loginUser(Model model, HttpSession session, 
 	@Valid LoginUsers login, BindingResult result){
 		if(result.hasErrors()){
 			return "view0";
-		
-			// List<ObjectError> errors = authSvc.validateLoginUsers(login);
-			// if(!errors.isEmpty()){
-			//     for(ObjectError e :errors)
-			//         login.addError(e);
-			//     return "view0";
-			// }
 
 		authSvc.setAttribute("login", login);
-		login.addAttribute("Username", new username());
-		login.addAttribute("Password", new password());
+		login.addAttribute("Username", new Username());
+		login.addAttribute("Password", new Password());
 		return "view1";
 		}
-	
 		}
-
-
-	//Track Login Count
-	//Use HttpSessionBindingListener to update the list of logged in users whenever user information is added 
-	//to the session or removed from the session based on user logs into the system or logs out from the system.
-	//https://www.baeldung.com/spring-security-track-logged-in-users 
-
-	//Task 2: write Http request handler, use AuthenticationService
-	//Might need to use this: https://www.baeldung.com/how-to-use-resttemplate-with-basic-authentication-in-spring 
 	
 	
 	public void handleRequest(HttpServletRequest request, HttpServletResponse response)
@@ -102,36 +119,33 @@ public class FrontController {
 		@PathVariable String loginId) throws IOException{
 	
 		LoginUsers result = null; 
-		if(result == null) {
+		{
 			return ResponseEntity
 			.status(HttpStatus.BAD_REQUEST) // 400 status code
 			.contentType(MediaType.APPLICATION_JSON)
 			.body("Invalid payload");
-			}
 		
-		//invalid username and/or password
-		if(result == null) {
+
 			return ResponseEntity
 			.status(HttpStatus.UNAUTHORIZED) // 401 status code
 			.contentType(MediaType.APPLICATION_JSON)
-			.body("Invalid username and/or password");
-			}
+			.body("Incorrect username and/or password");
+	
 		
 			//Redisplay View 0 with error message and captcha 
-		else {
-			return "view0"
-			.body("");
-		} 
+			//return "view0"; 
+			
 
 		}
 	
 	
 
 	//Task 4: To set expiration timeout
-	public default void LoginTimeout(){
 	//https://docs.spring.io/spring-data/redis/docs/current/api/org/springframework/data/redis/core/ValueOperations.html
 		//Code: set(K key, V value, Duration timeout)
 	//--> Set the value and expiration timeout for key.
+
+	public void LoginTimeout(){
 
 	}
 	
@@ -139,13 +153,13 @@ public class FrontController {
 	@GetMapping(path="/logout")
     public String logout(Model m, HttpSession s){
         System.out.println("Logging out of current session ...");
-		Login l= (Login)s.getAttribute("cart");
-        if(null == l){
-            l = new Login();
-            s.setAttribute("login", l);
-        }
-        m.addAttribute("username", new Username());
-        m.addAttribute("login", l);
+		// Login l= (Login)s.getAttribute("cart");
+        // if(null == l){
+        //     l = new Login();
+        //     s.setAttribute("login", l);
+        // }
+        // m.addAttribute("username", new Username());
+        // m.addAttribute("login", l);
         s.invalidate();
         return "view0";
     }

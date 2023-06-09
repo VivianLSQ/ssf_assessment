@@ -1,13 +1,8 @@
 package vttp2023.batch3.ssf.frontcontroller.controllers;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import jakarta.servlet.http.HttpSession;
-import jakarta.validation.constraints.Size;
-
-import java.io.OutputStream;
 import java.util.Random; 
 
 @Controller
@@ -15,7 +10,7 @@ import java.util.Random;
 public class CaptchaController {
 
     public static String generateMathCaptcha(){
-    Random number;
+    Random number = new Random();
     int randomNumber1 = number.nextInt(50-1)+1; 
     int randomNumber2 = number.nextInt(50-1)+1; 
 
@@ -26,7 +21,7 @@ public class CaptchaController {
         + "+-*/".charAt((new Random()).nextInt(4))
         + " "
         + randomNumber2);
-    String answer = randomNumber1 + operator + randomNumber2;
+    String answer = randomNumber1 + "operator" + randomNumber2;
     return answer; 
 
  

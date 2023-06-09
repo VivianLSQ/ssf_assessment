@@ -9,9 +9,11 @@
 		<title>Login</title>
 	</head>
 	<body>
-
+		<div> 
 		<h2>Please Login</h2>
+		</div>
 
+		<form method="POST" data-th-action="@{/login}" data-th-object="${login}"> 
 		<table>
 			<tr>
 				<td> 
@@ -32,12 +34,17 @@
 				</td>
 			</tr>
 			<tr>
-				<td></td>
+				<td>
+					<!--Insert Captcha here-->
+					<input id="textBox" type="text" name="text" size="30" placeholder="Answer">
+					<div th-if="${login.username=valid}"></div>
+					</div>
+				</td>
 				<td>
 					<button>Login</button>
 				</td>
 			</tr>
 		</table>
-		
+	</form>
 	</body>
 </html>

@@ -6,9 +6,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import jakarta.validation.Valid;
+import vttp2023.batch3.ssf.frontcontroller.model.LoginUsers;
 
 @Service
 public class AuthenticationService {
@@ -37,25 +41,23 @@ private String authenticateUrl =
 			RequestEntity req = RequestEntity.get(authenticateUrl). build();
 			RestTemplate template = new RestTemplate(); 
 			ResponseEntity<String> resp = template.exchange(req, String.class);
-			
 			return authenticateUrl; 
 
-			if(("username"|"password") != ("login.username"|"login.password")){
+			//if username or password inputted does not match/ aka incorrect, return view 0
+			if(("username"||"password") != ("login.username"||"login.password")){
 				return "view0"; 
 
-
 			}
-		
 	}
-
 
 
 	// Task 3
 	// DO NOT CHANGE THE METHOD'S SIGNATURE
 	// Write an implementation to disable a user account for 30 mins
 	public void disableUser(String username) {
-		if(loginCount >= 3){
+		if(loginCount>= 3){
 			//then disable user 
+			//can use session id to track (?); or use hashmap
 		}
 
 	}
@@ -68,6 +70,11 @@ private String authenticateUrl =
 		//else return to View 0 to try login again 
 		return false;
 	}
+
+
+
+	// public void save(@Valid LoginUsers login, Model model) {
+	// }
 
 
 

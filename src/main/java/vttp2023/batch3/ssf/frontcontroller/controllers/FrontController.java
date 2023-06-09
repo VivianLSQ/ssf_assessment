@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -70,14 +72,18 @@ public class FrontController {
 	public void handleRequest(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException{
 		//Use AuthenticationService.authenticate();
+		MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+		map.add("username", username);
+		map.add("password", password);
 	}
 	
-	public ResponseEntity<String> saveLogin(@Valid LoginUsers login, BindingResult result, Model model){
+	public String saveLogin(@Valid LoginUsers login, BindingResult result, Model model){
 		if(result.hasErrors()){
 			return "view0";
 		}
 		authSvc.save(login, model);
 		LoginUsers.addAttribute("successMessage", "Correct login credentials inputted, with status code:" + HttpStatus.CREATED + "."); 
+		System.out.println("Authenticated <username>"); 
 		return "view1"; 
 	}
 	

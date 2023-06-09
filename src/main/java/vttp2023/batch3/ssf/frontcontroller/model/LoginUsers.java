@@ -57,6 +57,9 @@ public class LoginUsers implements Serializable{
         return Json.createObjectBuilder() // Json.createObjectBuilder
         .add("username", this.getUsername()) // using getter
         .add("password", this.getPassword()); // using getter
+        }
+
+        public static void addAttribute(String string, String string2) {
         } 
     
     

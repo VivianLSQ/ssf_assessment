@@ -1,4 +1,4 @@
-package vttp2023.batch3.ssf.frontcontroller.respositories;
+package vttp2023.batch3.ssf.frontcontroller.repositories;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

@@ -40,7 +40,7 @@ private String authenticateUrl =
 			
 			return authenticateUrl; 
 
-			if(("username"||"password") != ("login.username"|"login.password")){
+			if(("username"|"password") != ("login.username"|"login.password")){
 				return "view0"; 
 
 
@@ -54,6 +54,10 @@ private String authenticateUrl =
 	// DO NOT CHANGE THE METHOD'S SIGNATURE
 	// Write an implementation to disable a user account for 30 mins
 	public void disableUser(String username) {
+		if(loginCount >= 3){
+			//then disable user 
+		}
+
 	}
 
 	// Task 5

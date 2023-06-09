@@ -14,6 +14,14 @@ public class AuthenticationRepository {
 
 	// Task 5
 	// Use this class to implement CRUD operations on Redis
+	template.opsForValue().set(login.getUsername(), login.toJson(). toString());
+	String result = (String) template
+		.opsForValue()
+		.get(login.getUsername()); 
+	if(result !=null){
+		return 1; 
+	}
+	return 0; 
 
 
 }

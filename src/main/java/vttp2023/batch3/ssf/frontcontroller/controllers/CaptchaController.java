@@ -24,10 +24,12 @@ System.out.println(
     + " "
     + randomNumber2); 
 
-OutputStream os = response.getOutputStream();
-CaptchaMath.write(os);
-HttpSession session = request.getSession();
-session.setAttribute("captcha_security", )
+answerTotal = randomNumber1 + operator + randomNumber2; 
+
+// OutputStream os = response.getOutputStream();
+// CaptchaMath.write(os);
+// HttpSession session = request.getSession();
+// session.setAttribute("captcha_security", )
 
 }
 

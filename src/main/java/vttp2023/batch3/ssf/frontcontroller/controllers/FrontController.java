@@ -65,12 +65,12 @@ public class FrontController {
 	throws ServletException, IOException{
 		//Use AuthenticationService.authenticate();
 	
-	public ResponseEntity<String> saveLogin(@Valid LoginUser login, BindingResult result, Model model){
+	public ResponseEntity<String> saveLogin(@Valid LoginUsers login, BindingResult result, Model model){
 		if(result.hasErrors()){
 			return "view0";
 		}
 		authSvc.save(login, model);
-		LoginUser.addAttribute("successMessage", "Correct login credentials inputted, with status code:" + HttpStatus.CREATED + "."); 
+		LoginUsers.addAttribute("successMessage", "Correct login credentials inputted, with status code:" + HttpStatus.CREATED + "."); 
 		return "view1"; 
 	}
 	}
@@ -101,6 +101,7 @@ public class FrontController {
 	//remember to invalidate session at the end (task 6; logout button)
 	//authSvc.invalidate(); 
     }
+}
 
 	
 

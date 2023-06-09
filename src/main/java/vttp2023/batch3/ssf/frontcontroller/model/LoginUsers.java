@@ -19,6 +19,8 @@ public class LoginUsers implements Serializable{
     @NotBlank(message="Please input your password")
     private String password; 
 
+    private String captcha; 
+
     public String getUsername() {
         return username;
     }
@@ -35,6 +37,13 @@ public class LoginUsers implements Serializable{
         this.password = password;
     }
     
+    public String getCaptcha() {
+        return captcha;
+    }
+
+    public void setCaptcha(String captcha) {
+        this.captcha = captcha;
+    }
 
     public static LoginUsers createFromJson(JsonObject o) { 
         LoginUsers l = new LoginUsers(); // instantiate new Java class object
@@ -49,5 +58,7 @@ public class LoginUsers implements Serializable{
         .add("username", this.getUsername()) // using getter
         .add("password", this.getPassword()); // using getter
         } 
+    
+    
 
 }

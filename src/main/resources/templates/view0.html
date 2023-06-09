@@ -36,7 +36,9 @@
 			<tr>
 				<td>
 					<!--Insert Captcha here-->
-					<input id="textBox" type="text" name="text" size="30" placeholder="Answer">
+					<th-text src="${captchaString}/captcha"></th-text>
+					<input id="textBox" type="text" name="text" size="30" 
+					required="required" placeholder="Answer">
 					<div th-if="${login.username=valid}"></div>
 					</div>
 				</td>

@@ -58,15 +58,21 @@ public class FrontController {
 			// }
 
 		authSvc.setAttribute("login", login);
-		login.addAttribute("Username", new Username());
-		login.addAttribute("Password", new Password());
+		login.addAttribute("Username", new username());
+		login.addAttribute("Password", new password());
 		return "view1";
 		}
 	
 		}
 
 
+	//Track Login Count
+	//Use HttpSessionBindingListener to update the list of logged in users whenever user information is added 
+	//to the session or removed from the session based on user logs into the system or logs out from the system.
+	//https://www.baeldung.com/spring-security-track-logged-in-users 
+
 	//Task 2: write Http request handler, use AuthenticationService
+	//Might need to use this: https://www.baeldung.com/how-to-use-resttemplate-with-basic-authentication-in-spring 
 	
 	
 	public void handleRequest(HttpServletRequest request, HttpServletResponse response)
@@ -95,7 +101,7 @@ public class FrontController {
 	public ResponseEntity<String> getUsername(
 		@PathVariable String loginId) throws IOException{
 	
-		Login result - null; 
+		LoginUsers result = null; 
 		if(result == null) {
 			return ResponseEntity
 			.status(HttpStatus.BAD_REQUEST) // 400 status code
@@ -112,14 +118,16 @@ public class FrontController {
 			}
 		
 			//Redisplay View 0 with error message and captcha 
-			return "view0" ; 
+		else {
+			return "view0"
+			.body("");
+		} 
 
 		}
 	
 	
 
 	//Task 4: To set expiration timeout
-
 	public default void LoginTimeout(){
 	//https://docs.spring.io/spring-data/redis/docs/current/api/org/springframework/data/redis/core/ValueOperations.html
 		//Code: set(K key, V value, Duration timeout)
@@ -127,14 +135,22 @@ public class FrontController {
 
 	}
 	
-	//Task 6: Logout user and redisplay view0 when "/logout" button is pressed 
-
-	// @GetMapping(/logout")
-	// //remember to invalidate session at the end (task 6; logout button)
-	// //authSvc.invalidate(); 
-	// return "view0";
-    // }
+	//Task 6: Logout user when session ends, and redisplay view0 when "/logout" button is pressed
+	@GetMapping(path="/logout")
+    public String logout(Model m, HttpSession s){
+        System.out.println("Logging out of current session ...");
+		Login l= (Login)s.getAttribute("cart");
+        if(null == l){
+            l = new Login();
+            s.setAttribute("login", l);
+        }
+        m.addAttribute("username", new Username());
+        m.addAttribute("login", l);
+        s.invalidate();
+        return "view0";
+    }
 }
+
 
 	
 

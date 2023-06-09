@@ -36,11 +36,17 @@
 			<tr>
 				<td>
 					<!--Insert Captcha here-->
-					<th-text src="${captchaString}/captcha"></th-text>
+					<form method="post" id="subForm">
+						<label id="ebcaptchatext"></label>
+						<input type="text" class="textbox" id="ebcaptchainput" size="30" 
+						required="required" placeholder="Answer">
+						<button type="submit">Submit</button>
+					  </form>
+					<!-- <th-text src="${captchaString}/captcha"></th-text>
 					<input id="textBox" type="text" name="text" size="30" 
 					required="required" placeholder="Answer">
 					<div th-if="${login.username=valid}"></div>
-					</div>
+					</div> -->
 				</td>
 				<td>
 					<button>Login</button>

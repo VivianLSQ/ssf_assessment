@@ -72,9 +72,13 @@ private String authenticateUrl =
 	}
 
 
+	public void save(@Valid LoginUsers login, Model model) {
+	}
 
-	// public void save(@Valid LoginUsers login, Model model) {
-	// }
+
+    public void setAttribute(String string, @Valid LoginUsers login) {
+    }
+
 
 
 

@@ -1,7 +1,9 @@
 package vttp2023.batch3.ssf.frontcontroller.services;
 
+import java.util.Date;
 import java.util.Optional;
 
+import org.apache.catalina.session.StandardSession;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import vttp2023.batch3.ssf.frontcontroller.model.LoginUsers;
 
@@ -55,10 +58,47 @@ private String authenticateUrl =
 	// DO NOT CHANGE THE METHOD'S SIGNATURE
 	// Write an implementation to disable a user account for 30 mins
 	public void disableUser(String username) {
-		if(loginCount>= 3){
-			//then disable user 
-			//can use session id to track (?); or use hashmap
+		// if(loginCount>= 3){//then disable user 
+		// 	//can use session id to track (?); or use hashmap
+		
+		int loginAttempt;{
+            HttpSession session = new StandardSession(null);
+            if (session.getAttribute("loginCount") != null)
+                {
+                    session.setAttribute("loginCount", 0);
+                    loginAttempt = 0;
+                }
+            else
+            {
+                loginAttempt = (Integer) session.getAttribute("loginCount");
+            }
+		//3 attempts, counting from 0,1,2
+		if (loginAttempt >= 2 )
+		{        
+			long lastAccessedTime = session.getLastAccessedTime();
+			Date Date = new Date();
+			long currentTime = Date.getTime();
+			long timeDiff = currentTime - lastAccessedTime;
+			// 30 minutes in milliseconds  
+			if (timeDiff >= 1.8e+6)
+			{
+				//invalidate user session, so they can try again
+				session.invalidate();
+			}
+			else
+			{
+				 // Error message 
+				 session.setAttribute("message","You have exceeded the 3 failed login attempts. Please try logging in 30 minutes later.");
+			}  
+
 		}
+		else
+		{
+			loginAttempt++;
+			int allowLogin = 3-loginAttempt;
+			session.setAttribute("message","loginAttempt= "+loginAttempt+". Invalid username or password, or wrong answer to Captcha. You have "+allowLogin+" attempts remaining!");
+		}
+		session.setAttribute("loginCount",loginAttempt);
 
 	}
 
@@ -68,6 +108,7 @@ private String authenticateUrl =
 	public boolean isLocked(String username) {
 		//if(30 min not up), return to View 2
 		//else return to View 0 to try login again 
+
 		return false;
 	}
 

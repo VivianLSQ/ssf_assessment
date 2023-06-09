@@ -13,24 +13,24 @@ import java.util.Random;
 @Controller
 @RequestMapping("captcha")
 public class CaptchaController {
-randomNumber1 = number.nextInt(50-1)+1; 
-randomNumber2 = number.nextInt(50-1)+1; 
 
-System.out.println(
-    "What is"
-    + randomNumber1
-    + " "
-    + "+-*/".charAt((new Random()).newInt(4))
-    + " "
-    + randomNumber2); 
+    public static String generateMathCaptcha(){
+    Random number;
+    int randomNumber1 = number.nextInt(50-1)+1; 
+    int randomNumber2 = number.nextInt(50-1)+1; 
 
-answerTotal = randomNumber1 + operator + randomNumber2; 
+    System.out.println(
+        "What is"
+        + randomNumber1
+        + " "
+        + "+-*/".charAt((new Random()).nextInt(4))
+        + " "
+        + randomNumber2);
+    String answer = randomNumber1 + operator + randomNumber2;
+    return answer; 
 
-// OutputStream os = response.getOutputStream();
-// CaptchaMath.write(os);
-// HttpSession session = request.getSession();
-// session.setAttribute("captcha_security", )
-
+ 
+  }
 }
 
 

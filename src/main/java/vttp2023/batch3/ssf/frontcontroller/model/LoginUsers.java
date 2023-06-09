@@ -1,5 +1,4 @@
-package vttp2023.batch3.ssf.frontcontrollers.model;
-
+package vttp2023.batch3.ssf.frontcontroller.model;
 import java.io.Serializable;
 
 import jakarta.json.Json;
@@ -9,7 +8,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public class LoginUser implements Serializable{
+public class LoginUsers implements Serializable{
     @NotNull(message="Please input your username")
     @Size(min=2, message="Your name cannot be less than 2 chars")
     @NotBlank(message="Please input your username")
@@ -37,8 +36,8 @@ public class LoginUser implements Serializable{
     }
     
 
-    public static LoginUser createFromJson(JsonObject o) { 
-        LoginUser l = new LoginUser(); // instantiate new Java class object
+    public static LoginUsers createFromJson(JsonObject o) { 
+        LoginUsers l = new LoginUsers(); // instantiate new Java class object
         String login = o.getString("login"); // getString to get login 
         l.setUsername(login); // using setter
         l.setPassword(login); 
@@ -50,5 +49,5 @@ public class LoginUser implements Serializable{
         .add("username", this.getUsername()) // using getter
         .add("password", this.getPassword()); // using getter
         } 
-}
 
+}

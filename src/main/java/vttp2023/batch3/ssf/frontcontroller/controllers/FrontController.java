@@ -19,7 +19,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import vttp2023.batch3.ssf.frontcontroller.services.AuthenticationService;
-import vttp2023.batch3.ssf.frontcontrollers.model.LoginUser;
+import vttp2023.batch3.ssf.frontcontroller.model.LoginUsers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -33,7 +33,7 @@ import org.springframework.http.ResponseEntity;
 public class FrontController {
 
 	@Autowired
-	private LoginUser login ; 
+	private LoginUsers login ; 
 
 	@Autowired
 	private AuthenticationService authSvc; 
@@ -41,11 +41,11 @@ public class FrontController {
 	//Landing Page 
 	@PostMapping(path="/login")
 	public String loginUser(Model model, HttpSession session, 
-	@Valid LoginUser login, BindingResult result){
+	@Valid LoginUsers login, BindingResult result){
 		if(result.hasErrors()){
 			return "view0";
 		
-			List<ObjectError> errors = authSvc.validateLoginUser(login);
+			List<ObjectError> errors = authSvc.validateLoginUsers(login);
 			if(!errors.isEmpty()){
 			    for(ObjectError e :errors)
 			        login.addError(e);
